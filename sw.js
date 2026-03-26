@@ -1,6 +1,6 @@
 const CACHE_NAME = 'study-focus-v1';
 const urlsToCache = [
-  './Study.html',
+  './index.html',
   './image_40f6a1.png',
   './manifest.json'
 ];
