@@ -12,6 +12,24 @@
   <!-- ホーム画面アイコン（同じフォルダに保存した画像ファイル名を指定します） -->
   <link rel="apple-touch-icon" href="image_40f6a1.png">
   <link rel="manifest" href="manifest.json">
+  <style>
+    html, body, #root {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    /* 横画面時にノッチ・ホームインジケーター内側にコンテンツを入れるためのセーフエリア対応 */
+    #root > div {
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+    /* 日付入力欄のハミ出しを防ぎ、ボックス内に収まるように */
+    input[type="date"] {
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
 
   <!-- もしエラーが起きたら画面に赤字で表示する仕組み -->
   <script>
@@ -445,14 +463,14 @@
                 <label className="text-xs font-bold text-slate-600 mb-1 block">タスク名</label>
                 <input type="text" placeholder="例: 鉄壁 1セクション" value={formTaskName} onChange={e => setFormTaskName(e.target.value)} className="w-full p-2 text-sm rounded-lg border border-slate-200" />
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="flex flex-col gap-2">
                 <div>
                   <label className="text-xs font-bold text-slate-600 mb-1 block">いつから？</label>
-                  <input type="date" value={formStartDate} onChange={e => setFormStartDate(e.target.value)} className="w-full p-2 text-sm rounded-lg border border-slate-200" />
+                  <input type="date" value={formStartDate} onChange={e => setFormStartDate(e.target.value)} className="w-full p-2 text-sm rounded-lg border border-slate-200 box-border" />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-slate-600 mb-1 block">いつまで？</label>
-                  <input type="date" value={formDeadline} onChange={e => setFormDeadline(e.target.value)} className="w-full p-2 text-sm rounded-lg border border-slate-200" />
+                  <input type="date" value={formDeadline} onChange={e => setFormDeadline(e.target.value)} className="w-full p-2 text-sm rounded-lg border border-slate-200 box-border" />
                 </div>
               </div>
               <button onClick={handleAddTask} className="w-full py-2.5 mt-2 bg-emerald-600 text-white font-bold rounded-lg shadow hover:bg-emerald-700 transition">
