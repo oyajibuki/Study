@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="StudyFocus">
   <!-- ホーム画面アイコン（同じフォルダに保存した画像ファイル名を指定します） -->
-  <link rel="apple-touch-icon" href="image_40f6a1.png">
+  <link rel="apple-touch-icon" href="icon.png">
   <link rel="manifest" href="manifest.json">
   <style>
     html, body, #root {
@@ -28,6 +28,19 @@
       min-width: 0;
       width: 100%;
       box-sizing: border-box;
+    }
+    /* 横向きになっても縦向き表示に固定するCSS回転ロック */
+    @media screen and (orientation: landscape) {
+      html {
+        transform: rotate(-90deg);
+        transform-origin: left top;
+        width: 100vh;
+        height: 100vw;
+        overflow-x: hidden;
+        position: absolute;
+        top: 100%;
+        left: 0;
+      }
     }
   </style>
 
