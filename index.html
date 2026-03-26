@@ -34,12 +34,14 @@
     /* iPhoneで日付入力がはみ出す対策（PC版は影響なし） */
     @media (max-width: 480px) {
       input[type="date"] {
-        max-width: 100%;
-        min-width: 0;
-        font-size: 13px;
-        padding-left: 6px;
-        padding-right: 6px;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        font-size: 12px !important;
+        padding: 6px !important;
+        box-sizing: border-box !important;
       }
+      .date-field-wrap { overflow: hidden; }
     }
     /* 横向き対策 */
     #landscape-block { display: none; }
@@ -363,16 +365,17 @@
       };
 
       useEffect(() => {
-        // 初期値(0)の状態で画面が切り替わるバグを防ぐため、timerTotal > 0をガードに追加
         let timerId;
+        let finishId;
         if (currentScreen === 'timer' && !isDead && timerTotal > 0 && timeLeft > 0) {
           timerId = setInterval(() => {
             setTimeLeft(prev => prev - 1);
           }, 1000);
         } else if (currentScreen === 'timer' && !isDead && timerTotal > 0 && timeLeft === 0) {
-          handleFinishTimer();
+          // 円アニメーション(1s)が完了してから画面遷移
+          finishId = setTimeout(() => handleFinishTimer(), 1100);
         }
-        return () => clearInterval(timerId);
+        return () => { clearInterval(timerId); clearTimeout(finishId); };
       }, [currentScreen, timeLeft, isDead, timerTotal]);
 
       const changeDate = (offset) => {
@@ -450,11 +453,11 @@
                 className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500"
               />
               <div className="flex flex-col gap-3 mt-2">
-                <div>
+                <div className="date-field-wrap">
                   <label className="block text-xs font-bold text-slate-700 flex items-center gap-1 mb-1">
                     <span className="text-sm">📅</span>試験日
                   </label>
-                  <input 
+                  <input
                     type="date" value={examDate} onChange={(e) => setExamDate(e.target.value)}
                     className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:ring-2 focus:ring-emerald-500"
                   />
@@ -490,11 +493,11 @@
                 <input type="text" placeholder="例: 鉄壁 1セクション" value={formTaskName} onChange={e => setFormTaskName(e.target.value)} className="w-full p-2 text-sm rounded-lg border border-slate-200" />
               </div>
               <div className="flex flex-col gap-2">
-                <div>
+                <div className="date-field-wrap">
                   <label className="text-xs font-bold text-slate-600 mb-1 block">いつから？</label>
                   <input type="date" value={formStartDate} onChange={e => setFormStartDate(e.target.value)} className="w-full p-2 text-sm rounded-lg border border-slate-200 box-border" />
                 </div>
-                <div>
+                <div className="date-field-wrap">
                   <label className="text-xs font-bold text-slate-600 mb-1 block">いつまで？</label>
                   <input type="date" value={formDeadline} onChange={e => setFormDeadline(e.target.value)} className="w-full p-2 text-sm rounded-lg border border-slate-200 box-border" />
                 </div>
