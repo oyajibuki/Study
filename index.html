@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>StudyFocusApp</title>
   
   <!-- iPhoneアプリ化（PWA）対応 -->
@@ -467,16 +467,14 @@
                 </h3>
                 <button 
                   onClick={() => {
-                    navigator.clipboard.writeText("https://gemini.google.com/gem/af25bc8ac115")
-                      .then(() => alert("URLをコピーしました！ Safari等のブラウザを開いてペーストしてご利用ください。"))
-                      .catch(() => alert("自動コピーに失敗しました。以下のURLを手動でコピーしてください: https://gemini.google.com/gem/af25bc8ac115"));
+                    window.open("https://gemini.google.com/gem/af25bc8ac115", "_blank");
                   }} 
                   className="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-200 active:scale-95 transition flex items-center gap-1 shadow-sm"
                 >
-                  AIのURLをコピー <span className="text-[10px]">📋</span>
+                  専用AIを開く <span className="text-[10px]">🔗</span>
                 </button>
               </div>
-              <p className="text-xs text-slate-500">コピーしたURLからAIを開き、出力した文章をここにペーストしてください。</p>
+              <p className="text-xs text-slate-500">AIが出力したテキストをペーストするか、ファイルをアップロードしてください。</p>
               
               <textarea 
                 value={jsonInput}
