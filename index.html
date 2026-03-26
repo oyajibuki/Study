@@ -30,6 +30,16 @@
       box-sizing: border-box;
       max-width: 100%;
     }
+    /* iPhoneで日付入力がはみ出す対策（PC版は影響なし） */
+    @media (max-width: 480px) {
+      input[type="date"] {
+        max-width: 100%;
+        min-width: 0;
+        font-size: 13px;
+        padding-left: 6px;
+        padding-right: 6px;
+      }
+    }
     /* 横向き対策 */
     #landscape-block { display: none; }
     @media (orientation: landscape) and (max-height: 500px) {
