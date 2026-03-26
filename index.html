@@ -256,8 +256,8 @@
 
       const handleStartTask = (task) => {
         setActiveTask(task);
-        // デモ用: 10秒
-        const totalSeconds = 10; 
+        // 実時間（分 × 60秒）
+        const totalSeconds = task.dailyTime * 60; 
         setTimeLeft(totalSeconds);
         setTimerTotal(totalSeconds);
         setIsDead(false);
@@ -453,11 +453,18 @@
                 <h3 className="font-bold text-slate-700 text-sm flex items-center gap-2">
                   <span className="text-base">📤</span>AIプランを取り込む
                 </h3>
-                <a href="https://gemini.google.com/gem/af25bc8ac115" target="_blank" rel="noopener noreferrer" className="text-emerald-600 text-xs font-bold hover:underline flex items-center gap-1">
-                  専用AIを開く <span className="text-xs">🔗</span>
-                </a>
+                <button 
+                  onClick={() => {
+                    navigator.clipboard.writeText("https://gemini.google.com/gem/af25bc8ac115")
+                      .then(() => alert("URLをコピーしました！ Safari等のブラウザを開いてペーストしてご利用ください。"))
+                      .catch(() => alert("自動コピーに失敗しました。以下のURLを手動でコピーしてください: https://gemini.google.com/gem/af25bc8ac115"));
+                  }} 
+                  className="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-200 active:scale-95 transition flex items-center gap-1 shadow-sm"
+                >
+                  AIのURLをコピー <span className="text-[10px]">📋</span>
+                </button>
               </div>
-              <p className="text-xs text-slate-500">AIが出力したテキストをペーストするか、ファイルをアップロードしてください。</p>
+              <p className="text-xs text-slate-500">コピーしたURLからAIを開き、出力した文章をここにペーストしてください。</p>
               
               <textarea 
                 value={jsonInput}
@@ -612,7 +619,7 @@
                         }}
                         onDragEnd={() => setDraggingIdx(null)}
                         onDragOver={(e) => e.preventDefault()}
-                        className={`bg-white rounded-2xl shadow-sm border ${isDateCompleted ? 'border-emerald-200 bg-emerald-50/50' : 'border-slate-200'} p-3 flex items-center gap-3 transition-all duration-200 ${isDragging ? 'opacity-50 scale-95 shadow-md' : ''}`}
+                        className={`bg-white rounded-2xl border ${isDateCompleted ? 'border-emerald-200 bg-emerald-50/50 shadow-sm' : 'border-slate-200 shadow-sm'} p-3 flex items-center gap-3 transition-all duration-300 relative ${isDragging ? 'opacity-95 scale-[1.03] shadow-2xl z-50 rotate-1 border-emerald-400 bg-emerald-50' : ''}`}
                       >
                         
                         <div className="shrink-0">
@@ -724,14 +731,17 @@
               <p className="text-xs font-bold text-slate-500 text-center">期間を確認して計画的に進めましょう</p>
               
               <div className="overflow-x-auto pb-4">
-                <div className="min-w-[600px] bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
-                  <div style={{ display: 'grid', gridTemplateColumns: `120px repeat(${months.length}, 1fr)`, gap: '4px' }} className="mb-3">
+                <div className="w-full min-w-max bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+                  <div style={{ display: 'grid', gridTemplateColumns: `130px repeat(${months.length}, minmax(40px, 1fr))`, gap: '4px' }} className="mb-3">
                     <div className="text-xs font-bold text-slate-400 border-b border-slate-200 pb-2">タスク名</div>
                     {months.map((m, i) => {
                       const isCurrentMonth = i === 0;
+                      const [year, month] = m.split('/');
+                      const showYear = i === 0 || month === '01';
                       return (
                         <div key={i} className={`text-[10px] text-center font-bold pb-2 border-b border-slate-200 ${isCurrentMonth ? 'text-red-500' : 'text-slate-500'}`}>
-                          {m}
+                          {showYear && <div className="text-[9px] text-slate-400 mb-0.5">{year}年</div>}
+                          <div className={showYear ? "" : "pt-[14px]"}>{parseInt(month, 10)}月</div>
                           {isCurrentMonth && <div className="text-[8px] bg-red-100 text-red-600 rounded px-1 mt-0.5 inline-block">現在</div>}
                         </div>
                       );
@@ -752,14 +762,14 @@
                       const isOver = daysLeft <= 0;
 
                       return (
-                        <div key={task.id} style={{ display: 'grid', gridTemplateColumns: `120px repeat(${months.length}, 1fr)`, gap: '4px' }} className="items-center h-8 relative group">
-                          <div className="absolute inset-0 pointer-events-none" style={{ display: 'grid', gridTemplateColumns: `120px repeat(${months.length}, 1fr)`, gap: '4px' }}>
+                        <div key={task.id} style={{ display: 'grid', gridTemplateColumns: `130px repeat(${months.length}, minmax(40px, 1fr))`, gap: '4px' }} className="items-start relative group min-h-[2.5rem] pb-2 border-b border-slate-50">
+                          <div className="absolute inset-0 pointer-events-none" style={{ display: 'grid', gridTemplateColumns: `130px repeat(${months.length}, minmax(40px, 1fr))`, gap: '4px' }}>
                              <div></div>
-                             {months.map((_, i) => <div key={i} className="border-l border-slate-100/50 h-full"></div>)}
+                             {months.map((_, i) => <div key={i} className="border-l border-slate-50 h-full"></div>)}
                           </div>
 
-                          <div className="text-[11px] font-bold text-slate-700 truncate pr-2 z-10">
-                            <span className="text-[9px] text-slate-400 block -mb-1">{task.subject}</span>
+                          <div className="text-[11px] font-bold text-slate-700 break-words pr-2 z-10 leading-relaxed pt-1">
+                            <span className="text-[9px] text-slate-400 block mb-0.5">{task.subject}</span>
                             {task.name}
                           </div>
                           
